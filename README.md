@@ -18,11 +18,11 @@ Across 14 modules (Spring 2026), this course covered the full machine learning w
 
 | Module | Topic | Notebook |
 |---|---|---|
-| 02 | Machine Learning Tools | [Module_02_Lab_Exercise-1.ipynb](./Module_02_Lab_Exercise-1.ipynb) |
-| 03 | ML Workflow & Types of Learning | [Module_03_Lab_Exercise_1.ipynb](./Module_03_Lab_Exercise_1.ipynb) |
-| 04 | Working with Data & EDA | [Module_04_Lab_Exploratory_Data_Analysis.ipynb](./Module_04_Lab_Exploratory_Data_Analysis.ipynb) |
-| 05 | Data Preparation & Feature Engineering | [Module_05_Lab_Data_Preparation.ipynb](./Module_05_Lab_Data_Preparation.ipynb) |
-| 06 | Regression & Classification | [Module_06_Lab_Regression_and_Classification_(1).ipynb](./Module_06_Lab_Regression_and_Classification_(1).ipynb) |
+| 02 | Machine Learning Tools | [L02_TerryWilliams_ITAI1371.ipynb](./L02_TerryWilliams_ITAI1371.ipynb) |
+| 03 | ML Workflow & Types of Learning | [L03_TerryWilliams_ITAI1371.ipynb](./L03_TerryWilliams_ITAI1371.ipynb) |
+| 04 | Working with Data & EDA | [L04_TerryWilliams_ITAI1371.ipynb](./L04_TerryWilliams_ITAI1371.ipynb) |
+| 05 | Data Preparation & Feature Engineering | [L05_TerryWilliams_ITAI1371.ipynb](./L05_TerryWilliams_ITAI1371.ipynb) |
+| 06 | Regression & Classification | [L06_TerryWilliams_ITAI1371.ipynb](./L06_TerryWilliams_ITAI1371.ipynb) |
 | 07 | Evaluating Machine Learning Models | [L07_TerryWilliams_ITAI1371.ipynb](./L07_TerryWilliams_ITAI1371.ipynb) |
 | 08 | Overfitting, Underfitting, Regularization | [L08_TerryWilliams_ITAI1371.ipynb](./L08_TerryWilliams_ITAI1371.ipynb) |
 | 09 | Ensemble Methods | [L09_TerryWilliams_ITAI1371.ipynb](./L09_TerryWilliams_ITAI1371.ipynb) |
@@ -30,10 +30,40 @@ Across 14 modules (Spring 2026), this course covered the full machine learning w
 | 11 | Hyperparameter Tuning & AutoML | [L11_TerryWilliams_ITAI1371.ipynb](./L11_TerryWilliams_ITAI1371.ipynb) |
 | 12 | Ethics, Fairness, and Bias | [L12_TerryWilliams_ITAI1371.ipynb](./L12_TerryWilliams_ITAI1371.ipynb) |
 
-### Major Projects
+---
 
-- 🏈 **Midterm Project:** [FTY Swing Classifier](./FTY_Swing_Classifier.ipynb) — a classification project applying the techniques from the first half of the course.
-- 🏆 **Final Project:** [Fantasy Football ML](./Fantasy_Football_ML_Final_Notebook.ipynb) — a capstone project integrating EDA, feature engineering, multiple model families, evaluation metrics, and reflection on what worked.
+## Major Projects
+
+### 🏈 Midterm Project — Predicting Weekly Fantasy Football Player Performance
+📁 [MidTerm_TerryWilliams_ITAI1371.ipynb](./MidTerm_TerryWilliams_ITAI1371.ipynb)
+
+A regression project predicting **weekly fantasy football points** for NFL players using 2024 weekly performance data combined with 2023 season-summary statistics.
+
+**Approach:** Engineered weekly **lag features** (previous-week points, lag-2 points, rolling averages) and merged in prior-season summary stats. Trained and compared three models:
+
+| Model | RMSE | MAE | R² |
+|---|---|---|---|
+| **Random Forest** | **6.48** | 4.80 | **0.388** |
+| Gradient Boosting | 6.50 | 4.78 | 0.385 |
+| Linear Regression | 6.66 | 4.86 | 0.354 |
+
+**Key takeaways:**
+- Recent player performance dominates — lag features (previous-week points, season-to-date) were the most important predictors.
+- Prior-season context still added meaningful signal.
+- The two ensemble models tied each other within noise but both clearly beat Linear Regression, which lines up with what Module 09 taught about ensembles reducing variance on noisy real-world data.
+
+---
+
+### ⛳ Final Project — Golf Swing Quality Classification Using IMU Sensor Data
+📁 [Final_TerryWilliams_ITAI1371.ipynb](./Final_TerryWilliams_ITAI1371.ipynb)
+
+A multi-class classification project for the **FTY swing-quality classifier**, designed to score youth golf swings in real time from IMU sensor data. Predicts one of three categories: **Good**, **Needs Work**, or **Poor**.
+
+**Approach:** Generated a synthetic dataset of 2,000 swings using the FTY firmware spec (FTY-ARCH-001 §4.2) labeling rules, with 12% inter-rater label noise added to simulate the kind of disagreement real coaching rubrics produce near class boundaries. Engineered 12 swing features per shot and trained six classifiers — Decision Tree, Random Forest, XGBoost, Logistic Regression, KNN, and SVM — with a stratified 70/15/15 train/val/test split to preserve class proportions.
+
+**Reported metrics:** Accuracy, macro-F1, confusion matrix, and per-class precision/recall/F1.
+
+**Why this design:** This is a stand-in until the FTY pilot collects real youth-athlete swings (Phase 2). Building the full pipeline against synthetic-but-rule-consistent data lets us validate the modeling approach end-to-end and identify which feature set works best, before the real data collection effort begins.
 
 ---
 
@@ -47,7 +77,7 @@ Five takeaways stand out across the whole course:
 
 **3. Bias and variance pull in opposite directions.** Module 08 made this concrete with polynomial regression. Every modeling choice afterward — model complexity, regularization strength, ensemble method, even how much data to collect — became a deliberate choice about where to land on the bias-variance curve, instead of a vague feeling.
 
-**4. Ensembles aren't magic — they're decorrelation.** Module 09's lesson stuck: a hundred identical trees are no better than one. The whole game is encouraging diversity (different bootstrap samples, different feature subsets) so the errors cancel rather than compound.
+**4. Ensembles aren't magic — they're decorrelation.** Module 09's lesson stuck: a hundred identical trees are no better than one. The whole game is encouraging diversity (different bootstrap samples, different feature subsets) so the errors cancel rather than compound. I saw this play out for real in the Midterm Project — Random Forest and Gradient Boosting both beat Linear Regression on noisy weekly NFL data.
 
 **5. Fairness is a property of the system, not the algorithm.** Module 12 was the most uncomfortable lesson. A mathematically excellent model can still ship discriminatory outcomes, and dropping the protected attribute doesn't fix it. The hardest takeaway: some problems shouldn't be solved with ML at all, and recognizing that early is more responsible than shipping a flawed model with a long disclaimer.
 
@@ -68,7 +98,7 @@ Detective work on the Titanic dataset. Built histograms, count plots, box plots,
 Built the preprocessing pipeline: median imputation for `Age`, one-hot encoding for `Sex` and `Embarked`, `StandardScaler` for the numeric columns. Internalized why tree-based models *don't* need scaling but distance-based models definitely do.
 
 ### Lab 06 — Regression & Classification
-First "real" modeling lab. Linear Regression to predict Titanic `Fare` from `Age` and `Pclass`, then Logistic Regression to predict survival from `Age`, `Pclass`, and `Sex`. Learned to read coefficients to understand *why* a model is predicting what it's predicting — the interpretability win that becomes critical in Module 12.
+First "real" modeling lab. Linear Regression to predict Titanic `Fare` from `Age` and `Pclass`, then Logistic Regression to predict survival from `Age`, `Pclass`, and `Sex` (74.83% accuracy). Learned to read coefficients to understand *why* a model is predicting what it's predicting — the interpretability win that becomes critical in Module 12.
 
 ### Lab 07 — Better Model Evaluation
 The lab that taught me to distrust accuracy as a single number. Confusion matrix, precision (the "Boy Who Cried Wolf" metric), recall (the "Missing Child" metric), and Stratified K-Fold cross-validation. Learned the **"Pro Way"** of reporting performance: baseline + mean ± std + the business metric that matters.
@@ -92,7 +122,7 @@ Audited a Logistic Regression on the UCI Adult dataset for sex-based disparate i
 
 ## Tools and Stack
 
-The labs use the standard Python ML stack: **scikit-learn**, **pandas**, **numpy**, **matplotlib**, **seaborn**, plus **AutoGluon** for the AutoML lab. Notebooks were developed in Jupyter and Google Colab.
+The labs and projects use the standard Python ML stack: **scikit-learn**, **pandas**, **numpy**, **matplotlib**, **seaborn**, plus **AutoGluon** for the AutoML lab and **XGBoost** for the Final Project. Notebooks were developed in Jupyter and Google Colab.
 
 ---
 
